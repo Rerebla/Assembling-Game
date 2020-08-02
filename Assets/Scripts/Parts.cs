@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Parts : MonoBehaviour {
@@ -9,5 +8,20 @@ public class Parts : MonoBehaviour {
     public bool isFinalPart;
     // public List<GameObject> snapZones = new List<GameObject>();
     public string ID;
+    public string GetName() => this.name;
+    private int counter;
+    public int totalIngredients;
+    public GameObject output;
+    public void AddedPart() {
+        counter++;
+        if (counter >= totalIngredients) {
+            Instantiate(output, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+    }
+    private void Awake() {
+        gameObject.layer = 8;
+    }
 
+    public GameObject prefab;
 }
