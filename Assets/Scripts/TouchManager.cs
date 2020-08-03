@@ -27,13 +27,14 @@ public class TouchManager : MonoBehaviour {
         }
 
     }
+    public LayerMask layerMask;
     public GameObject selectedGO;
     private void Update() {
         if (Input.GetMouseButtonDown(0)) {
             if (selectMode) {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 8)) {
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
                     selectedGO = hit.collider.gameObject;
                     ToogleSelectMode(false, false);
                     Debug.Log(selectedGO);

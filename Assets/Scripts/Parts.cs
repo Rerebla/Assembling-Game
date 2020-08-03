@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Parts : MonoBehaviour {
+    public bool isUnlocked = false;
+    public Sprite shopImage;
     public bool isBuyable;
     public int price;
     public bool isBasePart;

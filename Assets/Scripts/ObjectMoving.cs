@@ -18,9 +18,8 @@ public class ObjectMoving : MonoBehaviour {
     public GameObject movingGO;
     void Update() {
         if (movingGO != null) {
-            movingGO.transform.Translate(fixedJoystickLeft.Direction.x * magnitude * Time.deltaTime, fixedJoystickRight.Direction.y * magnitude * Time.deltaTime, fixedJoystickLeft.Direction.y * magnitude * Time.deltaTime);
+            movingGO.transform.Translate(fixedJoystickLeft.Direction.x * magnitude * Time.deltaTime, fixedJoystickRight.Direction.y * magnitude * Time.deltaTime, fixedJoystickLeft.Direction.y * magnitude * Time.deltaTime, Space.World);
             movingGO.transform.Rotate(0, fixedJoystickRight.Direction.x, 0);
-            Debug.Log(movingGO + "in Update");
         }
     }
 }
