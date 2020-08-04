@@ -6,7 +6,7 @@ public class Parts : MonoBehaviour {
     public bool isUnlocked = false;
     public Sprite shopImage;
     public bool isBuyable;
-    public int price;
+    public float price;
     public bool isBasePart;
     public bool isFinalPart;
     // public List<GameObject> snapZones = new List<GameObject>();

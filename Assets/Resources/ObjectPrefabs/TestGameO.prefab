@@ -109,11 +109,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e864e505aafe6be408fb9e20077084db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUnlocked: 1
+  shopImage: {fileID: 0}
   isBuyable: 0
-  price: 0
+  price: 10
   isBasePart: 0
   isFinalPart: 0
   ID: test
+  totalIngredients: 0
+  output: {fileID: 0}
   prefab: {fileID: 2602657051846036303}
 --- !u!54 &8471151754955994172
 Rigidbody:

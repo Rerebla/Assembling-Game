@@ -9,6 +9,8 @@ public class ShopManager : MonoBehaviour {
     public GameObject shopEntry;
     public GameObject shopEntryParent;
     public GameObject canvas;
+    // TODO: Display money in Shop view.
+    public float money;
 
     private void Awake() {
         if (instance == null) {
@@ -25,17 +27,19 @@ public class ShopManager : MonoBehaviour {
             if (gameObject.GetComponent<Parts>().isUnlocked) {
                 unlockedPrefabs.Add(gameObject);
                 Parts parts = gameObject.GetComponent<Parts>();
-                Instantiate(shopEntry, shopEntryParent.transform);
-                InstantiateShopEntry(parts.shopImage, parts.name, parts.price);
+                InstantiateShopEntry(parts.shopImage, parts.name, parts.price, parts.ID, parts.gameObject);
                 print(gameObject);
             }
         }
     }
-    private void InstantiateShopEntry(Sprite displayImg, string displayName, int price) {
+    private void InstantiateShopEntry(Sprite displayImg, string displayName, float price, string ID, GameObject gameObject1) {
+        Instantiate(shopEntry, shopEntryParent.transform);
         ShopEntry shopEntryScript = shopEntry.GetComponent<ShopEntry>();
         shopEntryScript.displayImg = displayImg;
         shopEntryScript.displayName = displayName;
         shopEntryScript.price = price;
+        shopEntryScript.ID = ID;
+        shopEntryScript.GO = gameObject1;
         shopEntryScript.SetValues();
     }
     private bool isShopEnabled = false;
