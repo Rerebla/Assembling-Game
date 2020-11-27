@@ -25,6 +25,6 @@ public class ShopEntry : MonoBehaviour {
         if (ShopManager.instance.money >= price) {
             InventoryManager.instance.AddToDictionary(GO, 1);
         }
-        print("clickedLOL!");
+        // print("clickedLOL!");
     }
 }

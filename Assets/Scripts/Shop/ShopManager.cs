@@ -8,7 +8,7 @@ public class ShopManager : MonoBehaviour {
     public List<GameObject> unlockedPrefabs = new List<GameObject>();
     public GameObject shopEntry;
     public GameObject shopEntryParent;
-    public GameObject canvas;
+    public GameObject scrollView;
     // TODO: Display money in Shop view.
     public float money;
 
@@ -22,13 +22,13 @@ public class ShopManager : MonoBehaviour {
         ToggleShop(false, false);
     }
     private void Start() {
-        foreach (GameObject i in Prefabs) { print(i.GetComponent<Parts>().ID); }
+        // foreach (GameObject i in Prefabs) { print(i.GetComponent<Parts>().ID); }
         foreach (GameObject gameObject in ShopManager.instance.Prefabs) {
             if (gameObject.GetComponent<Parts>().isUnlocked) {
                 unlockedPrefabs.Add(gameObject);
                 Parts parts = gameObject.GetComponent<Parts>();
                 InstantiateShopEntry(parts.shopImage, parts.name, parts.price, parts.ID, parts.gameObject);
-                print(gameObject);
+                // print(gameObject);
             }
         }
     }
@@ -50,13 +50,13 @@ public class ShopManager : MonoBehaviour {
         if (fromButton) {
             if (isShopEnabled) {
                 isShopEnabled = false;
-                canvas.SetActive(false);
+                scrollView.SetActive(false);
             } else {
                 isShopEnabled = true;
-                canvas.SetActive(true);
+                scrollView.SetActive(true);
             }
         } else {
-            canvas.SetActive(value);
+            scrollView.SetActive(value);
         }
     }
 }
