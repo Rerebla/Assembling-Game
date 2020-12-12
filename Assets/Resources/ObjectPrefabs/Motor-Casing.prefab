@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1307487459327469008}
   - component: {fileID: 8766814598923433729}
   - component: {fileID: -1356134277650309919}
+  - component: {fileID: 1118276857461511303}
   m_Layer: 0
   m_Name: Motor-Casing
   m_TagString: Untagged
@@ -105,6 +106,20 @@ MonoBehaviour:
   totalIngredients: 1
   output: {fileID: 4059590756953267533, guid: ff13ff09c1f535747aefd309a0cc2c43, type: 3}
   prefab: {fileID: 584726902746473546}
+--- !u!64 &1118276857461511303
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584726902746473546}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &4877204713994116509
 PrefabInstance:
   m_ObjectHideFlags: 0

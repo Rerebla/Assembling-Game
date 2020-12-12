@@ -53,7 +53,7 @@ MonoBehaviour:
   displayImg: {fileID: 0}
   displayName: 
   ammount: 0
-  textMeshPro: {fileID: 5439483818875422277}
+  textInInventoryEntry: {fileID: 5439483818875422277}
   image: {fileID: 8551511391393775447}
   button: {fileID: 3584476991071102736}
   ID: 

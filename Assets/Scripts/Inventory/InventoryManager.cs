@@ -43,8 +43,8 @@ public class InventoryManager : MonoBehaviour {
         }
     }
     private void InstantiateInventoryEntry(Sprite displayImg, string displayName, float ammount, string ID, GameObject gameObject1) {
-        Instantiate(inventoryEntry, inventoryEntryParent.transform);
-        InventoryEntry inventoryEntryScript = inventoryEntry.GetComponent<InventoryEntry>();
+        GameObject inventoryEntryGo = Instantiate(inventoryEntry, inventoryEntryParent.transform);
+        InventoryEntry inventoryEntryScript = inventoryEntryGo.GetComponent<InventoryEntry>();
         inventoryEntryScript.displayImg = displayImg;
         inventoryEntryScript.displayName = displayName;
         inventoryEntryScript.ammount = ammount;
@@ -75,5 +75,61 @@ public class InventoryManager : MonoBehaviour {
                 scrollView.SetActive(value);
             }
         }
+    }
+    public void Update() {
+        spawnLocation = GetLocation();
+        if (shouldSpawn && Input.GetMouseButtonDown(0) && spawnLocation != Vector3.zero) {
+            shouldSpawn = false;
+            spawnLocation = new Vector3(spawnLocation.x, spawnLocation.y, spawnLocation.z);
+            Debug.LogWarning(GetInstanceID());
+            InventoryEntry ItemInventoryEntry = item.GetComponent<InventoryEntry>();
+            Instantiate(ItemInventoryEntry.GO, spawnLocation, Quaternion.identity);
+            ItemInventoryEntry.ammount -= 1;
+            ItemInventoryEntry.UpdateValues();
+            if (ItemInventoryEntry.ammount <= 0) {
+                RemoveFromDictionary(ItemInventoryEntry.GO);
+                Destroy(item);
+            }
+        }
+    }
+    public void SetValuesFromInventoryEntry() {
+
+    }
+    public void StartSpawningItem(GameObject passedItem) {
+        Debug.LogWarning(GetInstanceID() + "SPAWN");
+        item = passedItem;
+        shouldSpawn = true;
+        // StartCoroutine(Spawn(item));
+    }
+    private Vector3 spawnLocation = new Vector3();
+    private bool shouldSpawn = false;
+    private GameObject _item;
+    private GameObject item {
+        get {
+            return _item;
+        }
+        set {
+            Debug.LogWarning(value);
+            _item = value;
+        }
+    }
+    IEnumerator Spawn(GameObject item) {
+        yield return StartCoroutine(SetLocation());
+        spawnLocation = new Vector3(spawnLocation.x, spawnLocation.y, spawnLocation.z);
+        InventoryEntry ItemInventoryEntry = item.GetComponent<InventoryEntry>();
+        Instantiate(ItemInventoryEntry.GO, spawnLocation, Quaternion.identity);
+        ItemInventoryEntry.ammount -= 1;
+        ItemInventoryEntry.UpdateValues();
+        if (ItemInventoryEntry.ammount <= 0) {
+            RemoveFromDictionary(ItemInventoryEntry.GO);
+            Destroy(item);
+        }
+    }
+    IEnumerator SetLocation() {
+        spawnLocation = TouchManager.instance.GetPosition();
+        yield return null;
+    }
+    private Vector3 GetLocation() {
+        return TouchManager.instance.GetPosition();
     }
 }
