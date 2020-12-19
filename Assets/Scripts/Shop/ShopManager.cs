@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour {
@@ -11,19 +14,27 @@ public class ShopManager : MonoBehaviour {
     public GameObject scrollView;
     // TODO: Display money in Shop view.
     public float money;
+    public TMP_Text moneyText;
+    public UnityEngine.Object[] subListObjects;
 
     private void Awake() {
         if (instance == null) {
             instance = this;
         } else { Destroy(this); }
 
-        Object[] subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
-        foreach (GameObject gameObject in subListObjects) { Prefabs.Add(gameObject); }
+        subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
+
         ToggleShop(false, false);
     }
     private void Start() {
+        moneyText.text = money.ToString() + '$';
+        List<UnityEngine.GameObject> subListGameObjects = new List<GameObject>();
         // foreach (GameObject i in Prefabs) { print(i.GetComponent<Parts>().ID); }
-        foreach (GameObject gameObject in ShopManager.instance.Prefabs) {
+
+        subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
+        foreach (UnityEngine.Object UnityObject in subListObjects) { subListGameObjects.Add((GameObject) UnityObject); }
+        List<UnityEngine.GameObject> sortedListObjects = subListGameObjects.OrderBy(o => o.GetComponent<Parts>().orderID).ToList();
+        foreach (GameObject gameObject in sortedListObjects) {
             if (gameObject.GetComponent<Parts>().isUnlocked) {
                 unlockedPrefabs.Add(gameObject);
                 Parts parts = gameObject.GetComponent<Parts>();
@@ -33,8 +44,8 @@ public class ShopManager : MonoBehaviour {
         }
     }
     private void InstantiateShopEntry(Sprite displayImg, string displayName, float price, string ID, GameObject gameObject1) {
-        Instantiate(shopEntry, shopEntryParent.transform);
-        ShopEntry shopEntryScript = shopEntry.GetComponent<ShopEntry>();
+        GameObject shopEntryInstance = Instantiate(shopEntry, shopEntryParent.transform);
+        ShopEntry shopEntryScript = shopEntryInstance.GetComponent<ShopEntry>();
         shopEntryScript.displayImg = displayImg;
         shopEntryScript.displayName = displayName;
         shopEntryScript.price = price;
@@ -58,5 +69,9 @@ public class ShopManager : MonoBehaviour {
         } else {
             scrollView.SetActive(value);
         }
+    }
+    public void Buy(float price) {
+        money -= price;
+        moneyText.text = money.ToString() + '$';
     }
 }

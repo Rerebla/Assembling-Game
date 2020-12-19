@@ -28,6 +28,7 @@ public class TouchManager : MonoBehaviour {
 
     }
     public LayerMask layerMask;
+    public LayerMask defaultMask;
     public GameObject selectedGO;
     private void Update() {
         if (Input.GetMouseButtonDown(0)) {
@@ -42,5 +43,21 @@ public class TouchManager : MonoBehaviour {
                 }
             }
         }
+    }
+    public Vector3 GetPosition() {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask | defaultMask)) {
+            return hit.point;
+        }
+        return Vector3.zero;
+    }
+    public GameObject GetGameObject() {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
+            return hit.collider.gameObject;
+        }
+        return null;
     }
 }

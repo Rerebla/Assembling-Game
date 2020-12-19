@@ -16,7 +16,6 @@ public class Inventory : MonoBehaviour {
     public System.Action OnDisabled;
     private void OnEnable() {
         OnEnabled?.Invoke();
-        print("Enabled! IN Invetnroy");
     }
     private void OnDisable() {
         OnDisabled?.Invoke();

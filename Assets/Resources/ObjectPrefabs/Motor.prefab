@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8918203409210201916}
+  - component: {fileID: 7591195384023938542}
   - component: {fileID: 936418525962139031}
   - component: {fileID: 4945505067018536504}
   - component: {fileID: 617530303908841922}
-  - component: {fileID: 7591195384023938542}
   m_Layer: 0
   m_Name: Motor
   m_TagString: Untagged
@@ -34,6 +34,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7591195384023938542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059590756953267533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e864e505aafe6be408fb9e20077084db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orderID: 0
+  isUnlocked: 1
+  shopImage: {fileID: 0}
+  isBuyable: 0
+  price: 5
+  isBasePart: 0
+  isFinalPart: 0
+  ID: motor
+  totalIngredients: 0
+  output: {fileID: 0}
+  prefab: {fileID: 4059590756953267533}
 --- !u!33 &936418525962139031
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -97,25 +120,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7591195384023938542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4059590756953267533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e864e505aafe6be408fb9e20077084db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isUnlocked: 1
-  shopImage: {fileID: 0}
-  isBuyable: 0
-  price: 5
-  isBasePart: 0
-  isFinalPart: 0
-  ID: motor
-  totalIngredients: 0
-  output: {fileID: 0}
-  prefab: {fileID: 4059590756953267533}

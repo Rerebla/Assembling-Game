@@ -19,9 +19,11 @@ public class InventoryEntry : MonoBehaviour {
             image.sprite = displayImg;
         }
     }
+    //TODO: Implement spawning Location choosing
     public void OnClick() {
         print(ID + ammount + "In Inventory");
-        Instantiate(GO, new Vector3(0, 0, 3), Quaternion.identity);
+        Vector3 spawningLocation = new Vector3(Random.Range(-4.2f, 4.2f), Random.Range(1.15f, 4f), Random.Range(-4.5f, 3));
+        Instantiate(GO, spawningLocation, Quaternion.identity);
         ammount -= 1;
         UpdateValues();
         if (ammount <= 0) {
