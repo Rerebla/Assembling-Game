@@ -7,9 +7,9 @@ public class TouchManager : MonoBehaviour {
     public GameObject joystickLeft;
     public GameObject joystickRight;
     public void ToggleSelectModeButton() {
-        ToogleSelectMode(true, false);
+        ToggleSelectMode(true, false);
     }
-    public void ToogleSelectMode(bool toggle, bool value) {
+    public void ToggleSelectMode(bool toggle, bool value) {
         if (toggle) {
             if (!selectMode) {
                 selectMode = true;
@@ -31,17 +31,15 @@ public class TouchManager : MonoBehaviour {
     public LayerMask defaultMask;
     public GameObject selectedGO;
     private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            if (selectMode) {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)) {
-                    selectedGO = hit.collider.gameObject;
-                    ToogleSelectMode(false, false);
-                    Debug.Log(selectedGO);
-                    ObjectMoving.instance.movingGO = selectedGO;
-                }
-            }
+        if (selectMode && Input.GetMouseButtonDown(0)) {
+            SelectMovingGO();
+        }
+    }
+    private void SelectMovingGO() {
+        selectedGO = GetGameObject();
+        if (selectedGO != null) {
+            ToggleSelectMode(false, false);
+            ObjectMoving.instance.movingGO = selectedGO;
         }
     }
     public Vector3 GetPosition() {

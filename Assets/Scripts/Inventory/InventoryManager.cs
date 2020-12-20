@@ -42,15 +42,10 @@ public class InventoryManager : MonoBehaviour {
             InstantiateInventoryEntry(parts.shopImage, parts.name, keyValuePair.Value, parts.ID, parts.gameObject);
         }
     }
-    private void InstantiateInventoryEntry(Sprite displayImg, string displayName, float ammount, string ID, GameObject gameObject1) {
+    private void InstantiateInventoryEntry(Sprite displayImg, string displayName, float ammount, string ID, GameObject GO) {
         GameObject inventoryEntryInstance = Instantiate(inventoryEntry, inventoryEntryParent.transform);
         InventoryEntry inventoryEntryScript = inventoryEntryInstance.GetComponent<InventoryEntry>();
-        inventoryEntryScript.displayImg = displayImg;
-        inventoryEntryScript.displayName = displayName;
-        inventoryEntryScript.ammount = ammount;
-        inventoryEntryScript.ID = ID;
-        inventoryEntryScript.GO = gameObject1;
-        inventoryEntryScript.UpdateValues();
+        inventoryEntryScript.SetValues(displayImg, displayName, ammount, ID, GO);
     }
     private void InventoryDisabled() {
         foreach (Transform child in inventoryEntryParent.transform) {

@@ -26,6 +26,5 @@ public class ShopEntry : MonoBehaviour {
             InventoryManager.instance.AddToDictionary(GO, 1);
             ShopManager.instance.Buy(price);
         }
-        // print("clickedLOL!");
     }
 }

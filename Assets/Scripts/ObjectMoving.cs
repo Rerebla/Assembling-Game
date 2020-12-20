@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ObjectMoving : MonoBehaviour {
     public static ObjectMoving instance;
@@ -12,11 +10,16 @@ public class ObjectMoving : MonoBehaviour {
             Destroy(this);
         }
     }
-    public float magnitude;
-    public FixedJoystick fixedJoystickLeft;
-    public FixedJoystick fixedJoystickRight;
+
+    [SerializeField]
+    float magnitude = 1;
+    [SerializeField]
+    FixedJoystick fixedJoystickLeft;
+    [SerializeField]
+    FixedJoystick fixedJoystickRight;
+    [HideInInspector]
     public GameObject movingGO;
-    void Update() {
+    private void Update() {
         if (movingGO != null) {
             movingGO.transform.Translate(fixedJoystickLeft.Direction.x * magnitude * Time.deltaTime, fixedJoystickRight.Direction.y * magnitude * Time.deltaTime, fixedJoystickLeft.Direction.y * magnitude * Time.deltaTime, Space.World);
             movingGO.transform.Rotate(0, fixedJoystickRight.Direction.x, 0);

@@ -29,7 +29,6 @@ public class ShopManager : MonoBehaviour {
     private void Start() {
         moneyText.text = money.ToString() + '$';
         List<UnityEngine.GameObject> subListGameObjects = new List<GameObject>();
-        // foreach (GameObject i in Prefabs) { print(i.GetComponent<Parts>().ID); }
 
         subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
         foreach (UnityEngine.Object UnityObject in subListObjects) { subListGameObjects.Add((GameObject) UnityObject); }
@@ -39,7 +38,6 @@ public class ShopManager : MonoBehaviour {
                 unlockedPrefabs.Add(gameObject);
                 Parts parts = gameObject.GetComponent<Parts>();
                 InstantiateShopEntry(parts.shopImage, parts.name, parts.price, parts.ID, parts.gameObject);
-                // print(gameObject);
             }
         }
     }
