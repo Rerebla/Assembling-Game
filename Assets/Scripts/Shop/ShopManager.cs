@@ -65,6 +65,7 @@ public class ShopManager : MonoBehaviour {
                 scrollView.SetActive(true);
             }
         } else {
+            isShopEnabled = false;
             scrollView.SetActive(value);
         }
     }
