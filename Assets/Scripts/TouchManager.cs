@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchManager : MonoBehaviour {
+    public static TouchManager instance;
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            Debug.LogError("Only one TouchManager per scene!");
+            Destroy(this);
+        }
+    }
     private bool selectMode = false;
     public GameObject joystickLeft;
     public GameObject joystickRight;
@@ -46,6 +55,14 @@ public class TouchManager : MonoBehaviour {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask | defaultMask)) {
+            return hit.point;
+        }
+        return Vector3.zero;
+    }
+    public Vector3 GetPosition(LayerMask providedLayer) {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, providedLayer)) {
             return hit.point;
         }
         return Vector3.zero;

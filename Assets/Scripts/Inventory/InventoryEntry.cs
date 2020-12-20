@@ -12,13 +12,13 @@ public class InventoryEntry : MonoBehaviour {
     public Image image;
     public Button button;
     public string ID;
-    public GameObject GO;
+    public GameObject Prefab;
     public void SetValues(Sprite DisplayImg, string DisplayName, float Ammount, string IDPrefab, GameObject GOPrefab) {
         displayImg = DisplayImg;
         displayName = DisplayName;
         ammount = Ammount;
         ID = IDPrefab;
-        GO = GOPrefab;
+        Prefab = GOPrefab;
         UpdateValues();
     }
     public void UpdateValues() {
@@ -27,15 +27,7 @@ public class InventoryEntry : MonoBehaviour {
             image.sprite = displayImg;
         }
     }
-    //TODO: Implement spawning Location choosing
     private void OnClick() {
-        Vector3 spawningLocation = new Vector3(Random.Range(-4.2f, 4.2f), Random.Range(1.15f, 4f), Random.Range(-4.5f, 3));
-        Instantiate(GO, spawningLocation, Quaternion.identity);
-        ammount -= 1;
-        UpdateValues();
-        if (ammount <= 0) {
-            InventoryManager.instance.RemoveFromDictionary(GO);
-            Destroy(gameObject);
-        }
+        InventoryManager.instance.SpawnInventoryEntry(Prefab);
     }
 }

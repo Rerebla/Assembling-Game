@@ -16,8 +16,10 @@ public class Inventory : MonoBehaviour {
     public System.Action OnDisabled;
     private void OnEnable() {
         OnEnabled?.Invoke();
+        Debug.Log("Inventory is definetly enabled");
     }
     private void OnDisable() {
         OnDisabled?.Invoke();
+        Debug.Log("Inventory is defindetly disabled");
     }
 }

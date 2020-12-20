@@ -20,6 +20,9 @@ public class InventoryManager : MonoBehaviour {
         Inventory.instance.OnEnabled += InventoryEnabled;
         Inventory.instance.OnDisabled += InventoryDisabled;
     }
+    private void Update() {
+        SpawnUpdateLoop();
+    }
     public Dictionary<GameObject, float> Items = new Dictionary<GameObject, float>();
     public void AddToDictionary(GameObject gameObject, float ammount) {
         if (Items.TryGetValue(gameObject, out float internalAmmount)) {
@@ -57,18 +60,48 @@ public class InventoryManager : MonoBehaviour {
         ToggleInventory(true, false);
     }
     public void ToggleInventory(bool fromButton, bool value) {
-        for (int i = 0; i <= 2; i++) {
-            if (fromButton) {
-                if (isInvetoryEnabled) {
-                    isInvetoryEnabled = false;
-                    scrollView.SetActive(false);
-                } else {
-                    isInvetoryEnabled = true;
-                    scrollView.SetActive(true);
-                }
+        // for (int i = 0; i <= 2; i++) {
+        if (fromButton) {
+            if (isInvetoryEnabled) {
+                isInvetoryEnabled = false;
+                scrollView.SetActive(false);
             } else {
-                scrollView.SetActive(value);
+                isInvetoryEnabled = true;
+                scrollView.SetActive(true);
+            }
+        } else {
+            isInvetoryEnabled = value;
+            scrollView.SetActive(value);
+        }
+        // }
+    }
+
+    [SerializeField]
+    private LayerMask layerMask;
+    private bool shouldSpawn = false;
+    private GameObject InventoryEntryGameObjectPrefab;
+    private void SpawnUpdateLoop() {
+        if (shouldSpawn && Input.GetMouseButtonDown(0)) {
+            Vector3 position = TouchManager.instance.GetPosition(layerMask);
+            if (position != Vector3.zero) {
+                shouldSpawn = false;
+                InstantiateInventoryEntry(position);
             }
         }
+    }
+    private void InstantiateInventoryEntry(Vector3 position) {
+        position = new Vector3(position.x, position.y + 1, position.z);
+        Instantiate(InventoryEntryGameObjectPrefab, position, Quaternion.identity);
+        Items[InventoryEntryGameObjectPrefab] -= 1;
+        if (Items[InventoryEntryGameObjectPrefab] <= 0) {
+            RemoveFromDictionary(InventoryEntryGameObjectPrefab);
+        }
+        InventoryEntryGameObjectPrefab = null;
+    }
+
+    public void SpawnInventoryEntry(GameObject gameObject) {
+        ToggleInventory(false, false);
+        InventoryEntryGameObjectPrefab = gameObject;
+        shouldSpawn = true;
     }
 }
