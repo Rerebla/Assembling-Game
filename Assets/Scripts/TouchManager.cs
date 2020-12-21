@@ -5,6 +5,9 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour {
     public static TouchManager instance;
     private void Awake() {
+        Singleton();
+    }
+    private void Singleton() {
         if (instance == null) {
             instance = this;
         } else {

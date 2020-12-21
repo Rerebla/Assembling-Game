@@ -5,10 +5,13 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
     public static Inventory instance;
     private void Awake() {
+        Singleton();
+    }
+    private void Singleton() {
         if (instance == null) {
             instance = this;
         } else {
-            Debug.LogError("Only one Invetory!");
+            Debug.LogError("Only one Inventory per scene!");
             Destroy(this);
         }
     }

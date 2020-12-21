@@ -3,6 +3,9 @@
 public class ObjectMoving : MonoBehaviour {
     public static ObjectMoving instance;
     private void Awake() {
+        Singleton();
+    }
+    private void Singleton() {
         if (instance == null) {
             instance = this;
         } else {
@@ -21,7 +24,9 @@ public class ObjectMoving : MonoBehaviour {
     public GameObject movingGO;
     private void Update() {
         if (movingGO != null) {
-            movingGO.transform.Translate(fixedJoystickLeft.Direction.x * magnitude * Time.deltaTime, fixedJoystickRight.Direction.y * magnitude * Time.deltaTime, fixedJoystickLeft.Direction.y * magnitude * Time.deltaTime, Space.World);
+            float movingModifier = magnitude * Time.deltaTime;
+            Vector3 movement = new Vector3(fixedJoystickLeft.Direction.x * movingModifier, fixedJoystickRight.Direction.y * movingModifier, fixedJoystickLeft.Direction.y * movingModifier);
+            movingGO.transform.Translate(movement, Space.World);
             movingGO.transform.Rotate(0, fixedJoystickRight.Direction.x, 0);
         }
     }

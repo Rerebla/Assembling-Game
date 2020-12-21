@@ -12,27 +12,35 @@ public class ShopManager : MonoBehaviour {
     public GameObject shopEntry;
     public GameObject shopEntryParent;
     public GameObject scrollView;
-    // TODO: Display money in Shop view.
     public float money;
     public TMP_Text moneyText;
     public UnityEngine.Object[] subListObjects;
 
     private void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else { Destroy(this); }
-
-        subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
+        Singleton();
 
         ToggleShop(false, false);
     }
+    private void Singleton() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            Debug.LogError("Only one ShopManager per scene!");
+            Destroy(this);
+        }
+    }
     private void Start() {
         moneyText.text = money.ToString() + '$';
+        UnlockPrefabsAndInstantiate(LoadSortRescources());
+    }
+    private List<GameObject> LoadSortRescources() {
         List<UnityEngine.GameObject> subListGameObjects = new List<GameObject>();
-
         subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
         foreach (UnityEngine.Object UnityObject in subListObjects) { subListGameObjects.Add((GameObject) UnityObject); }
         List<UnityEngine.GameObject> sortedListObjects = subListGameObjects.OrderBy(o => o.GetComponent<Parts>().orderID).ToList();
+        return sortedListObjects;
+    }
+    private void UnlockPrefabsAndInstantiate(List<GameObject> sortedListObjects) {
         foreach (GameObject gameObject in sortedListObjects) {
             if (gameObject.GetComponent<Parts>().isUnlocked) {
                 unlockedPrefabs.Add(gameObject);

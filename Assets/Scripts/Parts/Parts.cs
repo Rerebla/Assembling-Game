@@ -24,6 +24,7 @@ public class Parts : MonoBehaviour {
         }
     }
     private void Awake() {
+        //Sets the layer to "MovablePart" layer
         gameObject.layer = 8;
     }
 

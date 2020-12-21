@@ -8,6 +8,9 @@ public class InventoryManager : MonoBehaviour {
     public GameObject scrollView;
     public static InventoryManager instance;
     private void Awake() {
+        Singelton();
+    }
+    private void Singelton() {
         if (instance == null) {
             instance = this;
         } else {
@@ -17,6 +20,9 @@ public class InventoryManager : MonoBehaviour {
     }
     private void Start() {
         ToggleInventory(false, false);
+        SubscribeToDisEnableEvents();
+    }
+    private void SubscribeToDisEnableEvents() {
         Inventory.instance.OnEnabled += InventoryEnabled;
         Inventory.instance.OnDisabled += InventoryDisabled;
     }
