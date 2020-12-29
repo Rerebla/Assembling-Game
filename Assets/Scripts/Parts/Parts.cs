@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Parts : MonoBehaviour {
+    public bool collisionHandled = false;
     public bool isChild = true;
     public float orderID;
     public bool isUnlocked = false;

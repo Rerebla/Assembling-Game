@@ -17,16 +17,8 @@ public class SnapZone : MonoBehaviour {
         gameObject.layer = 9;
         finishedStuff = true;
     }
-    private IEnumerator WaitForRandom(Collider otherCollider) {
-        yield return new WaitForSeconds(Random.Range(0.00001f, 0.0001f));
-        lock(isColliding) {
-            NewAddPart(otherCollider);
-        }
-    }
     private void OnTriggerEnter(Collider otherCollider) {
-        StartCoroutine(WaitForRandom(otherCollider));
-        // OldAddPart(otherCollider);
-
+        NewAddPart(otherCollider);
     }
     //Recipe List - AddedItems = "What i need"
     private void CheckIfAcceptableIDs() {
@@ -85,7 +77,8 @@ public class SnapZone : MonoBehaviour {
             tempIngredientIDs.Sort((x, y) => string.Compare(x, y));
             //!Potential bug hazard. If the addedIDs and the recipeIDs are in the same order and have the same count, but do not contain exactly the same stuff. 
             //!If there are two required components compA and one compB, it would trigger both if there are two compB and one compA and vice versa (I think).
-            if (tempIDs.SequenceEqual(tempIngredientIDs) && tempIDs.Count == tempIngredientIDs.Count) {
+            if (tempIDs.SequenceEqual(tempIngredientIDs) && tempIDs.Count == tempIngredientIDs.Count && !otherParts.collisionHandled) {
+                otherParts.collisionHandled = true;
                 //!Complete Recipe found
                 Debug.Log(validEntry.resultPart + "is complete");
                 GeneralFunctionManager.instance.SpawnWithCollider(validEntry.resultPart, transform.parent.transform.position, Quaternion.identity);
@@ -115,7 +108,8 @@ public class SnapZone : MonoBehaviour {
         //         }
         //     }
         // }
-        if (neededPartsIDs.Contains(otherParts.ID)) {
+        if (neededPartsIDs.Contains(otherParts.ID) && !otherParts.collisionHandled) {
+            otherParts.collisionHandled = true;
             parentParts.AddedPartNew(otherParts.prefab);
             GameObject instantiantedObj = Instantiate(otherParts.prefab, transform.position, Quaternion.identity, transform.parent);
             instantiantedObj.GetComponent<Parts>().isChild = true;
