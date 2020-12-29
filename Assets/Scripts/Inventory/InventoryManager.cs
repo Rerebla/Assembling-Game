@@ -97,7 +97,7 @@ public class InventoryManager : MonoBehaviour {
     }
     private void InstantiateInventoryEntry(Vector3 position) {
         position = new Vector3(position.x, position.y + 1, position.z);
-        Instantiate(InventoryEntryGameObjectPrefab, position, Quaternion.identity);
+        GeneralFunctionManager.instance.SpawnWithCollider(InventoryEntryGameObjectPrefab, position, Quaternion.identity);
         Items[InventoryEntryGameObjectPrefab] -= 1;
         if (Items[InventoryEntryGameObjectPrefab] <= 0) {
             RemoveFromDictionary(InventoryEntryGameObjectPrefab);

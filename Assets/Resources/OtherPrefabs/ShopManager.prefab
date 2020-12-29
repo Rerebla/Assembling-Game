@@ -46,3 +46,8 @@ MonoBehaviour:
   Prefabs: []
   unlockedPrefabs: []
   shopEntry: {fileID: 4215979444627396675, guid: 9aedde1c19fdb7840acef88181028cdf, type: 3}
+  shopEntryParent: {fileID: 0}
+  scrollView: {fileID: 0}
+  money: 0
+  moneyText: {fileID: 0}
+  subListObjects: []
