@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6212643079076453016}
+  - component: {fileID: 333002898485229117}
   - component: {fileID: 3682801959568571713}
   - component: {fileID: 6449646131402313614}
-  - component: {fileID: 8197837708815315706}
-  - component: {fileID: 333002898485229117}
   - component: {fileID: 8471151754955994172}
   m_Layer: 0
   m_Name: TestGameO
@@ -35,6 +34,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333002898485229117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602657051846036303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e864e505aafe6be408fb9e20077084db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isChild: 1
+  orderID: 1
+  isUnlocked: 1
+  shopImage: {fileID: 0}
+  isBuyable: 0
+  price: 10
+  isBasePart: 0
+  isFinalPart: 0
+  ID: test
+  totalIngredients: 0
+  output: {fileID: 0}
+  recipes: []
+  internalRecipes: []
+  internalItems: []
+  internalItemGameObjects: []
+  prefab: {fileID: 2602657051846036303}
 --- !u!33 &3682801959568571713
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -84,41 +111,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8197837708815315706
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2602657051846036303}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &333002898485229117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2602657051846036303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e864e505aafe6be408fb9e20077084db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isUnlocked: 1
-  shopImage: {fileID: 0}
-  isBuyable: 0
-  price: 10
-  isBasePart: 0
-  isFinalPart: 0
-  ID: test
-  totalIngredients: 0
-  output: {fileID: 0}
-  prefab: {fileID: 2602657051846036303}
 --- !u!54 &8471151754955994172
 Rigidbody:
   m_ObjectHideFlags: 0

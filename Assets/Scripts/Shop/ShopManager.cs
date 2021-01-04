@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour {
@@ -9,32 +10,46 @@ public class ShopManager : MonoBehaviour {
     public GameObject shopEntry;
     public GameObject shopEntryParent;
     public GameObject scrollView;
-    // TODO: Display money in Shop view.
     public float money;
+    public TMP_Text moneyText;
+    public UnityEngine.Object[] subListObjects;
 
     private void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else { Destroy(this); }
+        Singleton();
 
-        Object[] subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
-        foreach (GameObject gameObject in subListObjects) { Prefabs.Add(gameObject); }
         ToggleShop(false, false);
     }
+    private void Singleton() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            Debug.LogError("Only one ShopManager per scene!");
+            Destroy(this);
+        }
+    }
     private void Start() {
-        // foreach (GameObject i in Prefabs) { print(i.GetComponent<Parts>().ID); }
-        foreach (GameObject gameObject in ShopManager.instance.Prefabs) {
+        moneyText.text = money.ToString() + '$';
+        UnlockPrefabsAndInstantiate(LoadSortRescources());
+    }
+    private List<GameObject> LoadSortRescources() {
+        List<UnityEngine.GameObject> subListGameObjects = new List<GameObject>();
+        subListObjects = Resources.LoadAll("ObjectPrefabs", typeof(GameObject));
+        foreach (UnityEngine.Object UnityObject in subListObjects) { subListGameObjects.Add((GameObject) UnityObject); }
+        List<UnityEngine.GameObject> sortedListObjects = subListGameObjects.OrderBy(o => o.GetComponent<Parts>().orderID).ToList();
+        return sortedListObjects;
+    }
+    private void UnlockPrefabsAndInstantiate(List<GameObject> sortedListObjects) {
+        foreach (GameObject gameObject in sortedListObjects) {
             if (gameObject.GetComponent<Parts>().isUnlocked) {
                 unlockedPrefabs.Add(gameObject);
                 Parts parts = gameObject.GetComponent<Parts>();
                 InstantiateShopEntry(parts.shopImage, parts.name, parts.price, parts.ID, parts.gameObject);
-                // print(gameObject);
             }
         }
     }
     private void InstantiateShopEntry(Sprite displayImg, string displayName, float price, string ID, GameObject gameObject1) {
-        Instantiate(shopEntry, shopEntryParent.transform);
-        ShopEntry shopEntryScript = shopEntry.GetComponent<ShopEntry>();
+        GameObject shopEntryInstance = Instantiate(shopEntry, shopEntryParent.transform);
+        ShopEntry shopEntryScript = shopEntryInstance.GetComponent<ShopEntry>();
         shopEntryScript.displayImg = displayImg;
         shopEntryScript.displayName = displayName;
         shopEntryScript.price = price;
@@ -56,7 +71,12 @@ public class ShopManager : MonoBehaviour {
                 scrollView.SetActive(true);
             }
         } else {
+            isShopEnabled = false;
             scrollView.SetActive(value);
         }
+    }
+    public void Buy(float price) {
+        money -= price;
+        moneyText.text = money.ToString() + '$';
     }
 }

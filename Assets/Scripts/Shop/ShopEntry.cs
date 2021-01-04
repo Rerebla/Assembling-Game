@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +22,7 @@ public class ShopEntry : MonoBehaviour {
     public void OnClick() {
         if (ShopManager.instance.money >= price) {
             InventoryManager.instance.AddToDictionary(GO, 1);
+            ShopManager.instance.Buy(price);
         }
-        // print("clickedLOL!");
     }
 }
