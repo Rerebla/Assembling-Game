@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,9 +23,9 @@ public class RecipeManager : MonoBehaviour {
 [System.Serializable]
 public class RecipeContainer {
     [SerializeField]
-    private List<RecipeEntry> InternalRecipes = new List<RecipeEntry>();
+    private List<RecipeEntry> InternalRecipeList = new List<RecipeEntry>();
     public List<RecipeEntry> GetRecipeEntry(GameObject key) {
-        return InternalRecipes.Where(r => r.basePart.GetComponent<Parts>().ID == key.GetComponent<Parts>().ID).ToList();
+        return InternalRecipeList.Where(r => r.basePart.GetComponent<Parts>().ID == key.GetComponent<Parts>().ID).ToList();
     }
 }
 
@@ -34,12 +33,12 @@ public class RecipeContainer {
 public class RecipeEntry {
     public List<string> GetIDsOfIngredients() {
         List<string> IDList = new List<string>();
-        foreach (GameObject gameObject in ingredients) {
+        foreach (GameObject gameObject in ingredientList) {
             IDList.Add(gameObject.GetComponent<Parts>().ID);
         }
         return IDList;
     }
     public GameObject basePart;
     public GameObject resultPart;
-    public List<GameObject> ingredients;
+    public List<GameObject> ingredientList;
 }

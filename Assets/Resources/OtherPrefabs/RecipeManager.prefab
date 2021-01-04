@@ -44,4 +44,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recipes:
-    InternalRecipes: []
+    InternalRecipeList:
+    - basePart: {fileID: 584726902746473546, guid: 4980641b78ee2e14aaaff524cd57ebd8, type: 3}
+      resultPart: {fileID: 4059590756953267533, guid: ff13ff09c1f535747aefd309a0cc2c43, type: 3}
+      ingredientList:
+      - {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}
+    - basePart: {fileID: 4059590756953267533, guid: ff13ff09c1f535747aefd309a0cc2c43, type: 3}
+      resultPart: {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}
+      ingredientList:
+      - {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}
+      - {fileID: 584726902746473546, guid: 4980641b78ee2e14aaaff524cd57ebd8, type: 3}
+      - {fileID: 584726902746473546, guid: 4980641b78ee2e14aaaff524cd57ebd8, type: 3}
+    - basePart: {fileID: 4059590756953267533, guid: ff13ff09c1f535747aefd309a0cc2c43, type: 3}
+      resultPart: {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}
+      ingredientList:
+      - {fileID: 584726902746473546, guid: 4980641b78ee2e14aaaff524cd57ebd8, type: 3}
+      - {fileID: 584726902746473546, guid: 4980641b78ee2e14aaaff524cd57ebd8, type: 3}
+      - {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}
+      - {fileID: 2602657051846036303, guid: 33fa0b829c3e27549bd2fdbc57902faa, type: 3}

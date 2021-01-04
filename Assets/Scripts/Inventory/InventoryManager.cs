@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour {
@@ -7,9 +6,7 @@ public class InventoryManager : MonoBehaviour {
     public GameObject inventoryEntry;
     public GameObject scrollView;
     public static InventoryManager instance;
-    private void Awake() {
-        Singelton();
-    }
+    private void Awake() => Singelton();
     private void Singelton() {
         if (instance == null) {
             instance = this;
@@ -83,7 +80,10 @@ public class InventoryManager : MonoBehaviour {
     }
 
     [SerializeField]
+#pragma warning disable CS0649
     private LayerMask layerMask;
+#pragma warning disable CS0649
+
     private bool shouldSpawn = false;
     private GameObject InventoryEntryGameObjectPrefab;
     private void SpawnUpdateLoop() {
@@ -97,7 +97,7 @@ public class InventoryManager : MonoBehaviour {
     }
     private void InstantiateInventoryEntry(Vector3 position) {
         position = new Vector3(position.x, position.y + 1, position.z);
-        GeneralFunctionManager.instance.SpawnWithCollider(InventoryEntryGameObjectPrefab, position, Quaternion.identity);
+        GenFunct.instance.SpawnWithCollider(InventoryEntryGameObjectPrefab, position, Quaternion.identity);
         Items[InventoryEntryGameObjectPrefab] -= 1;
         if (Items[InventoryEntryGameObjectPrefab] <= 0) {
             RemoveFromDictionary(InventoryEntryGameObjectPrefab);

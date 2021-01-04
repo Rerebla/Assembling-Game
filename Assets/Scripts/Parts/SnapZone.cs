@@ -1,137 +1,116 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SnapZone : MonoBehaviour {
-    //! One collider could trigger two collisions and then get processed as if it were two different parts. In essence one collider in, possibly two gameObjects out. 
+    //! One collider could trigger two collisions and then get processed as if it were two different parts. In essence one collider in, two ore more gameObjects out. 
     public List<string> acceptableIDs = new List<string>();
     Parts parentParts;
-    private void Awake() {
-        gameObject.layer = 9;
-    }
-    bool finishedStuff = false;
+    private void Awake() => gameObject.layer = 9;
     private void Start() {
         parentParts = GetComponentInParent<Parts>();
         CheckIfAcceptableIDs();
         gameObject.layer = 9;
-        finishedStuff = true;
     }
-    private void OnTriggerEnter(Collider otherCollider) {
-        NewAddPart(otherCollider);
-    }
-    //Recipe List - AddedItems = "What i need"
+
+    private void OnTriggerEnter(Collider otherCollider) => CheckCollision(otherCollider);
     private void CheckIfAcceptableIDs() {
+        if (acceptableIDs.Count > 0) { return; }
+        Debug.LogWarning(this + "in" + parentParts.ID + "does not have any acceptable ID");
+    }
+    private bool rudimentaryChecks(SnapZone otherSnapZone, Parts otherParts) {
+        if (otherSnapZone || !otherParts || otherParts.isChild || !acceptableIDs.Contains(otherParts.ID)) { return false; }
+
         if (acceptableIDs.Count <= 0) {
             Debug.LogWarning(this + "in" + parentParts.ID + "does not have any acceptable ID");
+            return false;
         }
+        return true;
     }
-    public static object isColliding = new object();
-    private void NewAddPart(Collider otherCollider) {
-        if (!finishedStuff) {
-            return;
-        }
+    private void CheckCollision(Collider otherCollider) {
         SnapZone otherSnapZone = otherCollider.gameObject.GetComponent<SnapZone>();
-        if (otherSnapZone) {
-            return;
-        }
         Parts otherParts = otherCollider.gameObject.GetComponent<Parts>();
-        if (!otherParts) {
-            return;
-        }
-        if (otherParts.isChild) {
-            return;
-        }
-        if (acceptableIDs.Count <= 0) {
-            Debug.LogWarning(this + "in" + parentParts.ID + "does not have any acceptable ID");
-            return;
-        }
-        if (!acceptableIDs.Contains(otherParts.ID)) {
-            return;
-        }
-        if (parentParts.internalItemGameObjects.Contains(otherCollider.gameObject)) {
-            Debug.Log("Collided with child");
-            return;
-        }
-        Debug.Log(Time.time);
+        if (!rudimentaryChecks(otherSnapZone, otherParts)) { return; }
 
-        List<RecipeEntry> validEntries = new List<RecipeEntry>();
-        foreach (RecipeEntry entry in parentParts.recipes) {
-            //Loops over the items in the parent and doesn't add the entries that don't contain them to the validEntries list
-            if (parentParts.internalItems.All(elem => entry.ingredients.Select(ent => ent.gameObject.GetComponent<Parts>().ID).Contains(elem))) {
-                validEntries.Add(entry);
-            }
-        }
-        List<string> neededPartsIDs = new List<string>();
-        foreach (RecipeEntry validEntry in validEntries) {
-            List<string> validIDs = new List<string>();
-            validIDs.AddRange(validEntry.ingredients.Select(ingredient => ingredient.GetComponent<Parts>().ID));
-            List<string> itemIDs = new List<string>();
-            itemIDs.AddRange(parentParts.internalItems);
-            List<string> tempIDs = new List<string>();
-            tempIDs.AddRange(itemIDs);
-            tempIDs.Add(otherParts.ID);
-            List<string> tempIngredientIDs = new List<string>();
-            tempIngredientIDs.AddRange(validEntry.ingredients.Select(ingredient => ingredient.GetComponent<Parts>().ID));
-            tempIDs.Sort((x, y) => string.Compare(x, y));
-            tempIngredientIDs.Sort((x, y) => string.Compare(x, y));
-            //!Potential bug hazard. If the addedIDs and the recipeIDs are in the same order and have the same count, but do not contain exactly the same stuff. 
-            //!If there are two required components compA and one compB, it would trigger both if there are two compB and one compA and vice versa (I think).
-            if (tempIDs.SequenceEqual(tempIngredientIDs) && tempIDs.Count == tempIngredientIDs.Count && !otherParts.collisionHandled) {
-                otherParts.collisionHandled = true;
-                //!Complete Recipe found
-                Debug.Log(validEntry.resultPart + "is complete");
-                GeneralFunctionManager.instance.SpawnWithCollider(validEntry.resultPart, transform.parent.transform.position, Quaternion.identity);
-                Destroy(otherCollider.gameObject);
-                Destroy(transform.parent.gameObject);
-                return;
-            }
-            // neededPartsIDs.AddRange(validIDs.Except(itemIDs));
-            List<string> removedIDs = new List<string>();
-            foreach (string validID in validIDs) {
-                if (itemIDs.Contains(validID)) {
-                    //sanitized validIDS
-                    // validIDs.Remove(validID);
-                    removedIDs.Add(validID);
-                    itemIDs.Remove(validID);
-                }
-            }
-            foreach (string removedID in removedIDs) {
-                validIDs.Remove(removedID);
-            }
-            neededPartsIDs.AddRange(validIDs);
-        }
-        // foreach (RecipeEntry validEntry in validEntries) {
-        //     foreach (GameObject ingredient in validEntry.ingredients) {
-        //         if (parentParts.internalItems.Select(item => item.GetComponent<Parts>().ID).ToList().FindAll((ingredient.GetComponent<Parts>().ID) >= 2)) {
+        List<RecipeEntry> validEntryList = makeValidEntryList();
 
-        //         }
-        //     }
-        // }
-        if (neededPartsIDs.Contains(otherParts.ID) && !otherParts.collisionHandled) {
-            otherParts.collisionHandled = true;
-            parentParts.AddedPartNew(otherParts.prefab);
-            GameObject instantiantedObj = Instantiate(otherParts.prefab, transform.position, Quaternion.identity, transform.parent);
-            instantiantedObj.GetComponent<Parts>().isChild = true;
-            Destroy(instantiantedObj.GetComponent<Collider>());
-            foreach (SnapZone snap in instantiantedObj.GetComponentsInChildren<SnapZone>()) { Destroy(snap); }
-            instantiantedObj.layer = 9;
-            Destroy(otherCollider.gameObject);
-            parentParts.AddGameObject(instantiantedObj);
-            Destroy(gameObject);
+        List<string> neededPartsIDList = new List<string>();
+        foreach (RecipeEntry validEntry in validEntryList) {
+            List<string> validIDList = new List<string>();
+            validIDList.AddRange(validEntry.ingredientList.Select(ingredient => ingredient.GetComponent<Parts>().ID));
+            List<string> itemIDList = new List<string>();
+            itemIDList.AddRange(parentParts.internalItems);
+            List<string> sortedIDList = new List<string>();
+            sortedIDList.AddRange(itemIDList);
+            sortedIDList.Add(otherParts.ID);
+            if (validIDList.Count == sortedIDList.Count) {
+                checkIfCompleteRecipe(validEntry, sortedIDList, otherCollider, otherParts);
+            }
+            neededPartsIDList.AddRange(makeNeededPartsIDList(validIDList, itemIDList));
+        }
+        if (neededPartsIDList.Contains(otherParts.ID) && !otherParts.collisionHandled) {
+            addIngredient(otherParts, otherCollider);
         }
     }
-    private void OldAddPart(Collider otherCollider) {
-        Parts parts = otherCollider.gameObject.GetComponent<Parts>();
-
-        if (parts == null) {
-            return;
+    private void checkIfCompleteRecipe(RecipeEntry validEntry, List<string> sortedIDList, Collider otherCollider, Parts otherParts) {
+        List<string> sortedIngredientIDList = new List<string>();
+        sortedIngredientIDList.AddRange(validEntry.ingredientList.Select(ingredient => ingredient.GetComponent<Parts>().ID));
+        sortedIDList.Sort((x, y) => string.Compare(x, y));
+        sortedIngredientIDList.Sort((x, y) => string.Compare(x, y));
+        //!Probably is fixed.
+        //*Potential bug hazard. If the addedIDs and the recipeIDs are in the same order and have the same count, but do not contain exactly the same stuff. 
+        //*If there are two required components compA and one compB, it would trigger both if there are two compB and one compA and vice versa (I think).
+        //*Can be mitigated with the validID list in the Snap Zone, but is only a workaround. Will have to find a better solution
+        bool sequenceEqual = sortedIDList.SequenceEqual(sortedIngredientIDList);
+        bool countEqual = sortedIDList.Count == sortedIngredientIDList.Count;
+        bool ammountEqual = GenFunct.instance.ListToDictionary(sortedIDList).Except(GenFunct.instance.ListToDictionary(sortedIngredientIDList)).Count() <= 0;
+        if (sequenceEqual && countEqual && ammountEqual && !otherParts.collisionHandled) {
+            CompleteRecipe(otherParts, validEntry, otherCollider);
         }
-        if (acceptableIDs.Contains(parts.ID)) {
-            Instantiate(parts.prefab, transform.position, Quaternion.identity, transform.parent);
-            Destroy(otherCollider.gameObject);
-            parentParts.AddedPart();
-            Destroy(gameObject);
+    }
+    private List<RecipeEntry> makeValidEntryList() {
+        List<RecipeEntry> validEntryList = new List<RecipeEntry>();
+        foreach (RecipeEntry entry in parentParts.recipes) {
+            //Loops over the items in the parent and doesn't add the entries that don't contain them, to the validEntryList
+            if (parentParts.internalItems.All(elem => entry.ingredientList.Select(ent => ent.gameObject.GetComponent<Parts>().ID).Contains(elem))) {
+                validEntryList.Add(entry);
+            }
         }
+        return validEntryList;
+    }
+    private List<string> makeNeededPartsIDList(List<string> validIDList, List<string> itemIDList) {
+        List<string> neededPartsIDList = new List<string>();
+        List<string> removedIDList = new List<string>();
+        foreach (string validID in validIDList) {
+            if (itemIDList.Contains(validID)) {
+                removedIDList.Add(validID);
+                itemIDList.Remove(validID);
+            }
+        }
+        foreach (string removedID in removedIDList) {
+            validIDList.Remove(removedID);
+        }
+        neededPartsIDList.AddRange(validIDList);
+        return neededPartsIDList;
+    }
+    private void CompleteRecipe(Parts otherParts, RecipeEntry validEntry, Collider otherCollider) {
+        otherParts.collisionHandled = true;
+        //!Complete Recipe found
+        Debug.Log(validEntry.resultPart + "is complete");
+        GenFunct.instance.SpawnWithCollider(validEntry.resultPart, transform.parent.transform.position, Quaternion.identity);
+        Destroy(otherCollider.gameObject);
+        Destroy(transform.parent.gameObject);
+        return;
+    }
+    private void addIngredient(Parts otherParts, Collider otherCollider) {
+        otherParts.collisionHandled = true;
+        parentParts.AddedPart(otherParts.prefab);
+        GameObject instantiantedObj = Instantiate(otherParts.prefab, transform.position, Quaternion.identity, transform.parent);
+        instantiantedObj.GetComponent<Parts>().isChild = true;
+        Destroy(instantiantedObj.GetComponent<Collider>());
+        foreach (SnapZone snap in instantiantedObj.GetComponentsInChildren<SnapZone>()) { Destroy(snap.gameObject); }
+        instantiantedObj.layer = 9;
+        Destroy(otherCollider.gameObject);
+        Destroy(gameObject);
     }
 }

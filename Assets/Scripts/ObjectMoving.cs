@@ -16,10 +16,13 @@ public class ObjectMoving : MonoBehaviour {
 
     [SerializeField]
     float magnitude = 1;
+#pragma warning disable CS0649
     [SerializeField]
     FixedJoystick fixedJoystickLeft;
     [SerializeField]
     FixedJoystick fixedJoystickRight;
+#pragma warning restore CS0649 
+
     [HideInInspector]
     public GameObject movingGO;
     private void Update() {
